@@ -35,7 +35,7 @@ spec:
     name: rag-api
 
   minReplicas: 2   # Always keep 2 pods (HA — survives one node failure)
-  maxReplicas: 6   # Cap at 6 to control AWS costs
+  maxReplicas: 3   # Cap at 6 to control AWS costs
 
   metrics:
     # Scale up when average CPU across all API pods exceeds 70%

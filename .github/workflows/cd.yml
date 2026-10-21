@@ -283,14 +283,14 @@ jobs:
       - name: Set API image in deployment manifest
         run: |
           API_IMAGE="${{ needs.build-and-push.outputs.api-image }}"
-          sed -i "s|image: REPLACE_WITH_ECR_URI/agentic-rag/api:latest|image: ${API_IMAGE}|g" \
+          sed -i "s|image: .*agentic-rag/api:.*|image: ${API_IMAGE}|g" \
             deployment/k8s/api/deployment.yaml
           echo "API deployment image set to: ${API_IMAGE}"
 
       - name: Set Airflow image in deployment manifest
         run: |
           AIRFLOW_IMAGE="${{ needs.build-and-push.outputs.airflow-image }}"
-          sed -i "s|image: REPLACE_WITH_ECR_URI/agentic-rag/airflow:latest|image: ${AIRFLOW_IMAGE}|g" \
+          sed -i "s|image: .*agentic-rag/airflow:.*|image: ${AIRFLOW_IMAGE}|g" \
             deployment/k8s/airflow/deployment.yaml
           echo "Airflow deployment image set to: ${AIRFLOW_IMAGE}"
 
@@ -299,7 +299,6 @@ jobs:
         run: |
           kubectl apply -f deployment/k8s/api/service.yaml
           kubectl apply -f deployment/k8s/api/deployment.yaml
-          kubectl apply -f deployment/k8s/api/hpa.yaml
 
       # ── Deploy Airflow ─────────────────────────────────────────────────────
       - name: Deploy Airflow
@@ -327,6 +326,10 @@ jobs:
             -n ${{ env.K8S_NAMESPACE }} \
             --timeout=600s
           echo "Airflow rollout complete."
+
+      # ── Apply HPA (after deployment is stable) ───────────────────────────
+      - name: Apply HPA
+        run: kubectl apply -f deployment/k8s/api/hpa.yaml
 
       # ── Deployment Summary ─────────────────────────────────────────────────
       # Print the status of all resources and the external URLs.
