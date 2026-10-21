@@ -51,7 +51,9 @@ name: CD — Build, Push, Deploy to EKS
 on:
   push:
     branches:
-      - deployment   # Only deploy from this branch
+      - main
+      - deployment
+  workflow_dispatch:
 
 # Prevent concurrent deployments — cancel the previous run if a new push arrives
 concurrency:

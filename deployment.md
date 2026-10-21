@@ -40,7 +40,7 @@ docker push $env:ECR_REGISTRY/agentic-rag/airflow:manual
 
 ## 4. Create the EKS Cluster
 ```powershell
-eksctl create cluster --name $env:CLUSTER_NAME --region $env:AWS_REGION --version 1.30 --nodegroup-name rag-workers --node-type t3.large --nodes 2 --nodes-min 1 --nodes-max 3 --managed
+eksctl create cluster --name $env:CLUSTER_NAME --region $env:AWS_REGION --version 1.31 --nodegroup-name rag-workers --node-type t3.large --nodes 2 --nodes-min 1 --nodes-max 3 --managed
 ```
 *(This process takes 15-20 minutes)*
 
