@@ -13,7 +13,7 @@
 #    This is equivalent to docker compose's env_file: .env
 #    The Secret key names match exactly what src/config.py (pydantic-settings) expects.
 #
-# 3. RollingUpdate with maxUnavailable: 0
+# 3. RollingUpdate with maxUnavailable: 1
 #    Zero-downtime deployments. The new pod must pass its readinessProbe
 #    before the old pod is terminated. Always 2+ pods serving traffic.
 #
@@ -45,13 +45,13 @@ spec:
       app: rag-api
 
   # ── Rolling Update Strategy ──────────────────────────────────────────────
-  # maxUnavailable: 0  — Never terminate a pod until the replacement is ready
+  # maxUnavailable: 1  — Never terminate a pod until the replacement is ready
   # maxSurge: 1        — Allow 1 extra pod temporarily during rollout
   # Result: during a deploy, pods go 2→3→2 (never below 2)
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxUnavailable: 0
+      maxUnavailable: 1
       maxSurge: 1
 
   template:
@@ -111,7 +111,7 @@ spec:
           resources:
             requests:
               memory: "1Gi"    # uvicorn + LangGraph + boto3 baseline
-              cpu: "500m"      # 0.5 CPU cores guaranteed
+              cpu: "250m"      # 0.25 CPU cores guaranteed
             limits:
               memory: "4Gi"    # PyTorch + LangGraph peaks at ~3.2GB; 4Gi prevents OOMKill
               cpu: "2000m"     # 2 CPU cores max (Bedrock calls are CPU-light but async)
