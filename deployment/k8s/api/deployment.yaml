@@ -123,8 +123,8 @@ spec:
             httpGet:
               path: /api/v1/health
               port: 8000
-            initialDelaySeconds: 40   # uvicorn + service init (DB + OpenSearch + SA) ~30s
-            periodSeconds: 15
+            initialDelaySeconds: 15   # uvicorn + service init (DB + OpenSearch + SA) ~30s
+            periodSeconds: 10
             timeoutSeconds: 10
             failureThreshold: 5
 

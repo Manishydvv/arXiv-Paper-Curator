@@ -314,7 +314,7 @@ jobs:
           echo "Waiting for rag-api rollout..."
           kubectl rollout status deployment/rag-api \
             -n ${{ env.K8S_NAMESPACE }} \
-            --timeout=300s
+            --timeout=600s
           echo "RAG API rollout complete."
 
       # ── Wait for Airflow rollout ───────────────────────────────────────────
